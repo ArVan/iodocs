@@ -877,7 +877,7 @@ function processRequest(req, res, next) {
 
                 // Set Headers and Call
                 req.resultHeaders = response.headers;
-                req.call = url.parse(options.host + options.path);
+                req.call = url.parse(options.host + ':' + options.port + options.path);
                 req.call = url.format(req.call);
 
                 // Response body

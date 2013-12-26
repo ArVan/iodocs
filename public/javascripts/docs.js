@@ -258,14 +258,22 @@
             if (result.signin) {
                 window.open(result.signin,"_blank","height=900,width=800,menubar=0,resizable=1,scrollbars=1,status=0,titlebar=0,toolbar=0");
             } else {
+                var pre = $('pre.response', resultContainer)
+                    .toggleClass('error', false);
+
                 var response,
                     responseContentType = result.headers['content-type'];
                 // Format output according to content-type
-                response = livedocs.formatData(result.response, responseContentType);
 
-                $('pre.response', resultContainer)
-                    .toggleClass('error', false)
-                    .text(response);
+                if(/image/.test(responseContentType)) {
+                    response = $(document.createElement('img')).attr('src', '//' + result.call);
+                    pre.html(response);
+                } else {
+                    response = livedocs.formatData(result.response, responseContentType);
+                    pre.text(response);
+                }
+
+
             }
 
         })
