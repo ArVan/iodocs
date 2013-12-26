@@ -5,3 +5,4 @@ logs/*
 pids/*
 .idea/*
 iodocs.iml
+public/data/*
