@@ -33,6 +33,15 @@ var livedocs = (function() {
                 data = formatXML(data);
 
                 break;
+            case /image/.test(contentType):
+                data = $('<img class="" src="' + data + '">');
+//                var rawResponse = data;
+//                // convert to Base64
+//                var b64Response = btoa(rawResponse);
+//                // create an image
+//                data = $(document.createElement('img')).attr('src', 'data:image/png;base64,'+b64Response);
+                console.log(data);
+                break;
         }
 
         return data;

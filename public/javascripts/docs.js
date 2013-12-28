@@ -265,11 +265,12 @@
                     responseContentType = result.headers['content-type'];
                 // Format output according to content-type
 
+                response = livedocs.formatData(result.response, responseContentType);
                 if(/image/.test(responseContentType)) {
-                    response = $(document.createElement('img')).attr('src', '//' + result.call);
-                    pre.html(response);
+//                    response = $(document.createElement('img')).attr('src', '//' + result.call);
+                    pre.html('').append(response);
                 } else {
-                    response = livedocs.formatData(result.response, responseContentType);
+
                     pre.text(response);
                 }
 

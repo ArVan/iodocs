@@ -655,7 +655,7 @@ function processRequest(req, res, next) {
                         req.resultHeaders = req.resultHeaders || 'None';
                     }
 
-                    req.call = url.parse(options.host + options.path);
+                    req.call = url.parse(options.host + ':' + options.port + options.path);
                     req.call = url.format(req.call);
 
                     // Response body
@@ -850,7 +850,7 @@ function processRequest(req, res, next) {
 
         // API Call. response is the response from the API, res is the response we will send back to the user.
         var apiCall = doRequest(options, function(response) {
-            response.setEncoding('utf-8');
+//            response.setEncoding('utf-8');
 
             if (config.debug) {
                 console.log('HEADERS: ' + JSON.stringify(response.headers));
@@ -862,7 +862,11 @@ function processRequest(req, res, next) {
             var body = '';
 
             response.on('data', function(data) {
-                body += data;
+                if(/image/.test(response.headers['content-type'])) {
+                    body += data.toString('base64');
+                } else {
+                    body += data;
+                }
             });
 
             response.on('end', function() {
@@ -873,6 +877,8 @@ function processRequest(req, res, next) {
                 if (/application\/javascript/.test(responseContentType)
                     || /application\/json/.test(responseContentType)) {
                     console.log(util.inspect(body));
+                } else if(/image/.test(responseContentType)) {
+                    body = "data:" + responseContentType + ";base64," + body;
                 }
 
                 // Set Headers and Call
@@ -883,7 +889,7 @@ function processRequest(req, res, next) {
                 // Response body
                 req.result = body;
 
-                console.log(util.inspect(body));
+                console.log(util.inspect(req.result));
 
                 next();
             })
